@@ -118,7 +118,7 @@ services:
       - redis:/data
   payment:
     build:
-      context: .
+      context: ./jeepay-payment
       dockerfile: Dockerfile
       args:
         PORT: 9216
@@ -142,7 +142,7 @@ services:
       - ./conf/payment/application.yml:/workspace/application.yml
   manager:
     build:
-      context: .
+      context: ./jeepay-manager
       dockerfile: Dockerfile
       args:
         PORT: 9217
@@ -166,7 +166,7 @@ services:
       - ./conf/manager/application.yml:/workspace/application.yml
   merchant:
     build:
-      context: .
+      context: ./jeepay-merchant
       dockerfile: Dockerfile
       args:
         PORT: 9218
