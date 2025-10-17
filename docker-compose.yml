@@ -1,5 +1,8 @@
 version: '3'
 
+# 先使用 mvn 编译 java
+# mvn clean package -Dmaven.compiler.source=17 -Dmaven.compiler.target=17
+
 # Maven 依赖提前编译，修改 MQ 队列 (修改 jeepay-components-mq 依赖) 也需要重新运行此命令
 # docker build -t jeepay-deps:latest -f docs/Dockerfile .
 # 启动命令 docker-compose up
@@ -9,13 +12,13 @@ version: '3'
 # 重新编译并覆盖之前的 docker-composer up --build --force-recreate
 
 
-# 编译前端请先执行 git submodule updata --init --recursive
+# 编译前端请先执行 git submodule update --init --recursive
 # 或者 git clone https://gitee.com/jeequan/jeepay-ui.git
 
 services:
   mysql:
-    hostname: mysql
-    container_name: jeepay-mysql
+    hostname: mysql8
+    container_name: mysql8
     # amd64 平台
     #image: mysql/mysql-server:latest
     image: mysql:8
@@ -34,12 +37,13 @@ services:
       jeepay:
         ipv4_address: 172.20.0.10
   activemq:
-    build:
-      context: ./docker/activemq
-      dockerfile: Dockerfile
-    hostname: activemq
-    container_name: jeepay-activemq
-    image: jeepay-activemq:latest
+    # build:
+    #   context: ./docker/activemq
+    #   dockerfile: Dockerfile
+    hostname: activemq5
+    container_name: activemq5
+    # image: jeepay-activemq:latest
+    image: jeepay/activemq:5.15.16
     ports: #- "1883:1883"
       #- "5672:5672"
       - "8161:8161"
@@ -106,8 +110,8 @@ services:
   #    jeepay:
   #      ipv4_address: 172.20.0.13
   redis:
-    hostname: redis
-    container_name: jeepay-redis
+    hostname: redis6
+    container_name: redis6
     image: redis:latest
     ports:
       - "6380:6379"
@@ -200,7 +204,7 @@ services:
     environment:
       - BACKEND_HOST=172.20.0.21:9216
     ports:
-      - "9226:80"
+      - "19216:80"
     depends_on:
       - payment
     networks:
@@ -218,7 +222,7 @@ services:
     environment:
       - BACKEND_HOST=172.20.0.22:9217
     ports:
-      - "9227:80"
+      - "19217:80"
     depends_on:
       - manager
     networks:
@@ -236,7 +240,7 @@ services:
     environment:
       - BACKEND_HOST=172.20.0.23:9218
     ports:
-      - "9228:80"
+      - "19218:80"
     depends_on:
       - merchant
     networks:
